@@ -97,7 +97,7 @@ class DrawPanel extends JPanel implements MouseListener {
                 }
             }
 
-            if (s.contains("JQK") || s.contains("QJK") || s.contains("KQJ") || s.contains("JKQ")){
+            if (s.contains("JQK") || s.contains("QJK") || s.contains("KQJ") || s.contains("JKQ") || s.contains("QKJ")){
                 for (int i = 0; i < hand.size(); i++) {
                     if (!hand.get(i).isShown()){
                         hand.get(i).flipCard();
