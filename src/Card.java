@@ -110,8 +110,19 @@ public class Card {
         return deck;
     }
 
+    public static int getDeckSize(){
+        return deck.size();
+    }
+
+    public static void resetDeck(){
+        deck = Card.buildDeck();
+    }
+
     public static ArrayList<Card> buildHand() {
         ArrayList<Card> hand = new ArrayList<Card>();
+        if (deck.isEmpty()){
+            deck = Card.buildDeck();
+        }
         for (int i = 0; i < 9; i++) {
             int r = (int)(Math.random()*deck.size());
             Card c = deck.remove(r);

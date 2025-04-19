@@ -26,28 +26,54 @@ class DrawPanel extends JPanel implements MouseListener {
         int x = 50;
         int y = 10;
         int counter = 0;
+        int[] num = new int[hand.size()];
         for (int i = 0; i < hand.size(); i++) {
-            Card c = hand.get(i);
-            if (c.getHighlight()) {
-                // draw the border rectangle around the card
-                g.drawRect(x, y, c.getImage().getWidth(), c.getImage().getHeight());
-            }
-            // establish the location of the rectangle's "hitbox"
-            c.setRectangleLocation(x, y);
-            g.drawImage(c.getImage(), x, y, null);
-            x = x + c.getImage().getWidth() + 10;
-            counter ++;
-            if (counter == 3){
-                y += c.getImage().getHeight() + 10;
-                x = 50;
-                counter = 0;
+            try {
+                num[i] = Integer.parseInt(hand.get(i).getValue());
+                Card c = hand.get(i);
+                if (c.getHighlight()) {
+                    // draw the border rectangle around the card
+                    g.drawRect(x, y, c.getImage().getWidth(), c.getImage().getHeight());
+                }
+                // establish the location of the rectangle's "hitbox"
+                c.setRectangleLocation(x, y);
+                g.drawImage(c.getImage(), x, y, null);
+                x = x + c.getImage().getWidth() + 10;
+                counter++;
+                if (counter == 3) {
+                    y += c.getImage().getHeight() + 10;
+                    x = 50;
+                    counter = 0;
+                }
+            } catch (Exception _) {
+                Card c = hand.get(i);
+                if (c.getHighlight()) {
+                    // draw the border rectangle around the card
+                    g.drawRect(x, y, c.getImage().getWidth(), c.getImage().getHeight());
+                }
+                // establish the location of the rectangle's "hitbox"
+                c.setRectangleLocation(x, y);
+                g.drawImage(c.getImage(), x, y, null);
+                x = x + c.getImage().getWidth() + 10;
+                counter++;
+                if (counter == 3) {
+                    y += c.getImage().getHeight() + 10;
+                    x = 50;
+                    counter = 0;
+                }
             }
         }
+
+
 
         // drawing the bottom button
          // with the font Courier New
         g.setFont(new Font("Courier New", Font.BOLD, 20));
+        if (!Checker.twoSum(num, 11)) {
+            g.drawString("No possible moves!\n Must Restart!", 80, 310);
+        }
         g.drawString("GET NEW CARDS", 80, 250);
+        g.drawString("Cards left: " + Card.getDeckSize(), 80,280);
         g.drawRect((int)button.getX(), (int)button.getY(), (int)button.getWidth(), (int)button.getHeight());
     }
 
@@ -62,6 +88,7 @@ class DrawPanel extends JPanel implements MouseListener {
             // if "clicked" is inside the button rectangle
             // aka --> did you click the button?
             if (button.contains(clicked)) {
+                Card.resetDeck();
                 hand = Card.buildHand();
             }
 
@@ -83,16 +110,16 @@ class DrawPanel extends JPanel implements MouseListener {
                     } catch (Exception exception){
                         s += hand.get(i).getValue();
                     }
-                    System.out.println(value);
-                    System.out.println(s);
                 }
             }
 
             if (value == 11){
                 for (int i = 0; i < hand.size(); i++) {
                     if (!hand.get(i).isShown()){
-                        hand.get(i).flipCard();
-                        hand.set(i,Card.buildCard());
+                        if (!hand.isEmpty()){
+                            hand.get(i).flipCard();
+                            hand.set(i,Card.buildCard());
+                        }
                     }
                 }
             }
